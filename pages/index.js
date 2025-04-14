@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-import axios from "axios";
+// import { useEffect, useState } from "react";
+import { useState } from "react";
+// import axios from "axios";
 
 const MapView = dynamic(() => import("../components/MapView"), {
   ssr: false,
