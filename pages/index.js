@@ -1,30 +1,33 @@
 import dynamic from "next/dynamic";
-// import { useEffect, useState } from "react";
-import { useState } from "react";
-// import axios from "axios";
+import { useEffect, useState } from "react";
+// import { useState } from "react";
+import axios from "axios";
 
 const MapView = dynamic(() => import("../components/MapView"), {
   ssr: false,
 });
 
 export default function Home() {
-  // const [outlets, setOutlets] = useState([]);
-  const [outlets] = useState([]);
+  const [outlets, setOutlets] = useState([]);
+  // const [outlets] = useState([]);
   const [showCircles, setShowCircles] = useState(true);
   const [radius, setRadius] = useState(5000); // Default: 5KM
 
-  // useEffect(() => {
-  //   const fetchOutlets = async () => {
-  //     try {
-  //       const res = await axios.get("https://your-fastapi-url.com/api/outlets");
-  //       setOutlets(res.data);
-  //     } catch (error) {
-  //       console.error("Failed to fetch outlet data:", error.message);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchOutlets = async () => {
+      try {
+        const res = await axios.get(
+          "https://mcd-locate-us-backend-9632d6133c9e.herokuapp.com/outlets"
+        );
+        console.log(res);
+        // setOutlets(res.data);
+      } catch (error) {
+        console.error("Failed to fetch outlet data:", error.message);
+      }
+    };
 
-  //   fetchOutlets();
-  // }, []);
+    fetchOutlets();
+  }, []);
 
   return (
     <div>
