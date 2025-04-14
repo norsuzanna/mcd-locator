@@ -8,7 +8,8 @@ const MapView = dynamic(() => import("../components/MapView"), {
 });
 
 export default function Home() {
-  const [outlets, setOutlets] = useState([]);
+  // const [outlets, setOutlets] = useState([]);
+  const [outlets] = useState([]);
   const [showCircles, setShowCircles] = useState(true);
   const [radius, setRadius] = useState(5000); // Default: 5KM
 
