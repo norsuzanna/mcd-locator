@@ -4,8 +4,6 @@ import { MapContainer, TileLayer, Marker, Circle, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Import icon files (you can replace these with your own custom icon URLs)
-import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
 const MapView = ({ outlets = [], showCircles = true, radius = 5000 }) => {
