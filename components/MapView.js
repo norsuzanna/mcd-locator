@@ -4,22 +4,22 @@ import { MapContainer, TileLayer, Marker, Circle, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Import icons (works after Webpack config)
-import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+// Import icon files (you can replace these with your own custom icon URLs)
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
-// Fix default Leaflet icon paths
-delete L.Icon.Default.prototype._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl,
-  iconUrl,
-  shadowUrl,
-});
-
 const MapView = ({ outlets = [], showCircles = true, radius = 5000 }) => {
   const center = [3.139, 101.6869]; // Default to Kuala Lumpur
+
+  // Custom Icon
+  const customIcon = new L.Icon({
+    iconUrl: "/images/cus-marker.png", // Add your custom icon in the public directory
+    iconSize: [35, 41], // Adjust size if needed
+    iconAnchor: [17, 41], // Adjust anchor position
+    popupAnchor: [1, -34],
+    shadowUrl: shadowUrl,
+    shadowSize: [41, 41],
+  });
 
   // Haversine distance in meters
   const getDistance = (a, b) => {
@@ -67,7 +67,10 @@ const MapView = ({ outlets = [], showCircles = true, radius = 5000 }) => {
       />
       {outlets.map((outlet, idx) => (
         <React.Fragment key={idx}>
-          <Marker position={[outlet.latitude, outlet.longitude]}>
+          <Marker
+            position={[outlet.latitude, outlet.longitude]}
+            icon={customIcon} // Use the custom icon here
+          >
             <Popup>
               <strong>{outlet.name}</strong>
               <br />
