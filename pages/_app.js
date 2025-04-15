@@ -1,5 +1,5 @@
 import "leaflet/dist/leaflet.css";
-import "../styles/globals.css"; // if you have global styles
+import "../styles/globals.css";
 import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
