@@ -1,61 +1,49 @@
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-// import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import dynamic from "next/dynamic";
 
 const MapView = dynamic(() => import("../components/MapView"), {
   ssr: false,
 });
 
-export default function Home() {
-  // const [outlets, setOutlets] = useState([]);
-  const [outlets] = useState([]);
+const Home = () => {
+  const [outlets, setOutlets] = useState([]);
   const [showCircles, setShowCircles] = useState(true);
-  const [radius, setRadius] = useState(5000); // Default: 5KM
+  const [radius, setRadius] = useState(5000);
 
   useEffect(() => {
-    const fetchOutlets = async () => {
-      try {
-        const res = await axios.get(
-          "https://mcd-locate-us-backend-9632d6133c9e.herokuapp.com/outlets"
-        );
-        console.log(res);
-        // setOutlets(res.data);
-      } catch (error) {
-        console.error("Failed to fetch outlet data:", error.message);
-      }
-    };
-
-    fetchOutlets();
+    axios
+      .get("https://mcd-locate-us-backend-9632d6133c9e.herokuapp.com/outlets")
+      .then((res) => setOutlets(res.data))
+      .catch((err) => console.error("Failed to fetch data", err));
   }, []);
 
   return (
     <div>
-      <h1>McDonald’s Outlets in KL</h1>
-
-      <div style={{ margin: "10px 0" }}>
+      <div style={{ margin: "1rem 0" }}>
         <label>
+          Show Circles
           <input
             type="checkbox"
             checked={showCircles}
             onChange={() => setShowCircles(!showCircles)}
+            style={{ marginLeft: "0.5rem" }}
           />
-          Show 5KM Catchment Circles
         </label>
-
         <select
-          style={{ marginLeft: "20px" }}
           value={radius}
           onChange={(e) => setRadius(Number(e.target.value))}
+          style={{ marginLeft: "1rem" }}
         >
-          <option value={3000}>3KM</option>
-          <option value={5000}>5KM</option>
-          <option value={10000}>10KM</option>
-          <option value={15000}>15KM</option>
+          <option value={3000}>3 KM</option>
+          <option value={5000}>5 KM</option>
+          <option value={10000}>10 KM</option>
+          <option value={15000}>15 KM</option>
         </select>
       </div>
-
       <MapView outlets={outlets} showCircles={showCircles} radius={radius} />
     </div>
   );
-}
+};
+
+export default Home;
