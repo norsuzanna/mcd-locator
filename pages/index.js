@@ -41,7 +41,17 @@ const Home = () => {
           <option value={15000}>15 KM</option>
         </select>
       </div>
-      <MapView outlets={outlets} showCircles={showCircles} radius={radius} />
+      <div
+        style={{ height: "100vh", display: "flex", flexDirection: "column" }}
+      >
+        <main style={{ flex: 1 }}>
+          <MapView
+            outlets={outlets}
+            showCircles={showCircles}
+            radius={radius}
+          />
+        </main>
+      </div>
     </div>
   );
 };

@@ -53,7 +53,7 @@ const MapView = ({ outlets = [], showCircles = true, radius = 5000 }) => {
     <MapContainer
       center={center}
       zoom={11}
-      style={{ height: "80vh", width: "100%" }}
+      style={{ height: "100%", width: "100%" }}
     >
       <TileLayer
         attribution="&copy; OpenStreetMap contributors"
