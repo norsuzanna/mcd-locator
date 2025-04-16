@@ -20,7 +20,18 @@ const Home = () => {
 
   return (
     <div>
-      <div style={{ margin: "1rem 0" }}>
+      <div
+        style={{
+          position: "fixed", // fixed to viewport
+          top: 20,
+          left: 20,
+          zIndex: 1000,
+          background: "white",
+          padding: "8px 12px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+        }}
+      >
         <label>
           Show Circles
           <input
