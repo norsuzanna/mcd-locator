@@ -23,7 +23,7 @@ const Home = () => {
       <div
         style={{
           position: "fixed", // fixed to viewport
-          top: 20,
+          top: 70,
           left: 20,
           zIndex: 1000,
           background: "white",
