@@ -13,7 +13,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("https://mcd-locate-us-backend-9632d6133c9e.herokuapp.com/outlets")
+      .get("https://rqh6lf-8000.csb.app/outlets")
       .then((res) => setOutlets(res.data))
       .catch((err) => console.error("Failed to fetch data", err));
   }, []);
@@ -46,6 +46,7 @@ const Home = () => {
           onChange={(e) => setRadius(Number(e.target.value))}
           style={{ marginLeft: "1rem" }}
         >
+          <option value={1000}>1 KM</option>
           <option value={3000}>3 KM</option>
           <option value={5000}>5 KM</option>
           <option value={10000}>10 KM</option>
