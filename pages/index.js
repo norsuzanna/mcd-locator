@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
+import ChatWidget from "../components/ChatWidget";
 
 const MapView = dynamic(() => import("../components/MapView"), {
   ssr: false,
@@ -64,6 +65,7 @@ const Home = () => {
           />
         </main>
       </div>
+      <ChatWidget />
     </div>
   );
 };
