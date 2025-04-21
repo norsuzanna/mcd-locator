@@ -20,7 +20,7 @@ const ChatWidget = () => {
 
       const botMsg = { sender: "bot", text: response.data.reply };
       setMessages((prev) => [...prev, botMsg]);
-    } catch (err) {
+    } catch () {
       const errorMsg = { sender: "bot", text: "Error connecting to chatbot." };
       setMessages((prev) => [...prev, errorMsg]);
     }
