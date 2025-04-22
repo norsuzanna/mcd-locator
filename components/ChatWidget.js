@@ -21,6 +21,7 @@ const ChatWidget = () => {
       const botMsg = { sender: "bot", text: response.data.reply };
       setMessages((prev) => [...prev, botMsg]);
     } catch (err) {
+      console.error("Chatbot request failed:", err);
       const errorMsg = { sender: "bot", text: "Error connecting to chatbot." };
       setMessages((prev) => [...prev, errorMsg]);
     }
