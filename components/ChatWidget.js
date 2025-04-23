@@ -28,6 +28,7 @@ const ChatWidget = () => {
     const newBotMsg = { sender: "bot", text: "" };
     setMessages((prev) => [...prev, newBotMsg]);
 
+    // Constructing the URL with the user's message as a query parameter
     const eventSource = new EventSourcePolyfill(
       `https://mcd-locator-4f4a288dfb77.herokuapp.com/chat?message=${encodeURIComponent(
         input
@@ -36,8 +37,6 @@ const ChatWidget = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        method: "POST",
-        body: JSON.stringify({ message: input }),
       }
     );
 
