@@ -21,7 +21,6 @@ const Home = () => {
 
   return (
     <div>
-      <ChatWidget />
       <div
         style={{
           position: "fixed", // fixed to viewport
@@ -66,6 +65,7 @@ const Home = () => {
           />
         </main>
       </div>
+      <ChatWidget />
     </div>
   );
 };
