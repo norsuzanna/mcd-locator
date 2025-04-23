@@ -1,171 +1,103 @@
+"use client";
 import React, { useState, useRef, useEffect } from "react";
-import "../styles/ChatWidget.module.css"; // optional custom styling
+import { EventSourcePolyfill } from "event-source-polyfill";
+import styles from "../styles/ChatWidget.module.css";
 
 const ChatWidget = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const controllerRef = useRef(null);
-  const scrollRef = useRef();
+  const messagesEndRef = useRef(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  const toggleChat = () => setIsOpen((prev) => !prev);
 
-    const userMessage = { sender: "user", text: input };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-
-    const botMessage = { sender: "bot", text: "" };
-    setMessages((prev) => [...prev, botMessage]);
-
-    controllerRef.current = new AbortController();
-
-    try {
-      const response = await fetch(
-        "https://mcd-locator-4f4a288dfb77.herokuapp.com/chat",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: input }),
-          signal: controllerRef.current.signal,
-        }
-      );
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value);
-        setMessages((prev) => {
-          const last = prev[prev.length - 1];
-          if (last.sender === "bot") {
-            const updated = [...prev];
-            updated[updated.length - 1] = {
-              ...last,
-              text: last.text + chunk,
-            };
-            return updated;
-          }
-          return prev;
-        });
-      }
-    } catch (err) {
-      console.error("Chat error:", err);
-      setMessages((prev) => [
-        ...prev,
-        { sender: "bot", text: "Sorry, an error occurred." },
-      ]);
-    }
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollToBottom();
   }, [messages]);
 
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const userMsg = { sender: "user", text: input };
+    setMessages((prev) => [...prev, userMsg]);
+
+    const newBotMsg = { sender: "bot", text: "" };
+    setMessages((prev) => [...prev, newBotMsg]);
+
+    const eventSource = new EventSourcePolyfill(
+      "https://mcd-locator-4f4a288dfb77.herokuapp.com/chat",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ message: input }),
+      }
+    );
+
+    setInput("");
+
+    eventSource.onmessage = (event) => {
+      if (event.data === "[DONE]") {
+        eventSource.close();
+        return;
+      }
+
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1].text += event.data;
+        return updated;
+      });
+    };
+
+    eventSource.onerror = () => {
+      eventSource.close();
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: "⚠️ Error connecting to chatbot." },
+      ]);
+    };
+  };
+
   return (
-    <div>
-      <div
-        className="chat-toggle-button"
-        onClick={() => setIsOpen(!isOpen)}
-        style={{
-          position: "fixed",
-          bottom: 20,
-          right: 20,
-          zIndex: 1000,
-          background: "#007bff",
-          color: "white",
-          padding: "10px 15px",
-          borderRadius: "50%",
-          cursor: "pointer",
-        }}
-      >
+    <div className={styles.container}>
+      <button className={styles.toggleBtn} onClick={toggleChat}>
         💬
-      </div>
+      </button>
 
       {isOpen && (
-        <div
-          className="chat-container"
-          style={{
-            position: "fixed",
-            bottom: 80,
-            right: 20,
-            width: "300px",
-            maxHeight: "500px",
-            background: "white",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
-            zIndex: 1000,
-          }}
-        >
-          <div
-            className="chat-messages"
-            style={{
-              flex: 1,
-              overflowY: "auto",
-              padding: "10px",
-              fontSize: "0.9rem",
-            }}
-          >
+        <div className={styles.chatBox}>
+          <div className={styles.header}>McD Chat</div>
+          <div className={styles.messages}>
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                style={{
-                  margin: "4px 0",
-                  textAlign: msg.sender === "user" ? "right" : "left",
-                }}
+                className={`${styles.msg} ${
+                  msg.sender === "user" ? styles.user : styles.bot
+                }`}
               >
-                <span
-                  style={{
-                    display: "inline-block",
-                    background: msg.sender === "user" ? "#007bff" : "#eee",
-                    color: msg.sender === "user" ? "white" : "black",
-                    padding: "8px 12px",
-                    borderRadius: "16px",
-                    maxWidth: "80%",
-                    wordWrap: "break-word",
-                  }}
-                >
-                  {msg.text}
-                </span>
+                {msg.text}
               </div>
             ))}
-            <div ref={scrollRef} />
+            <div ref={messagesEndRef} />
           </div>
-          <form
-            onSubmit={handleSubmit}
-            style={{ display: "flex", borderTop: "1px solid #ccc" }}
-          >
+          <div className={styles.inputArea}>
             <input
+              className={styles.input}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask something..."
-              style={{
-                flex: 1,
-                border: "none",
-                padding: "10px",
-                outline: "none",
-              }}
+              placeholder="Ask about McD outlets..."
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
             />
-            <button
-              type="submit"
-              style={{
-                border: "none",
-                background: "#007bff",
-                color: "white",
-                padding: "0 16px",
-              }}
-            >
-              ➤
+            <button className={styles.sendBtn} onClick={handleSend}>
+              Send
             </button>
-          </form>
+          </div>
         </div>
       )}
     </div>
