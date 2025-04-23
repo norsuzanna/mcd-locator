@@ -29,7 +29,9 @@ const ChatWidget = () => {
     setMessages((prev) => [...prev, newBotMsg]);
 
     const eventSource = new EventSourcePolyfill(
-      "https://mcd-locator-4f4a288dfb77.herokuapp.com/chat",
+      `https://mcd-locator-4f4a288dfb77.herokuapp.com/chat?message=${encodeURIComponent(
+        input
+      )}`,
       {
         headers: {
           "Content-Type": "application/json",
