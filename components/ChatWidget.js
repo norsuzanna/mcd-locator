@@ -49,6 +49,7 @@ const ChatWidget = () => {
       setMessages((prev) => {
         const updated = [...prev];
         updated[updated.length - 1].text += event.data;
+        console.log(updated);
         return updated;
       });
     };
