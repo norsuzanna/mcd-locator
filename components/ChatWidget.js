@@ -54,6 +54,7 @@ const ChatWidget = () => {
         });
       }
     } catch (err) {
+      console.error("Chat error:", err);
       setMessages((prev) => [
         ...prev,
         { sender: "bot", text: "Sorry, an error occurred." },
