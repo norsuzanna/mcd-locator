@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "../styles/ChatWidget.css"; // optional custom styling
+import "../styles/ChatWidget.module.css"; // optional custom styling
 
 const ChatWidget = () => {
   const [messages, setMessages] = useState([]);
