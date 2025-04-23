@@ -25,22 +25,19 @@ const ChatWidget = () => {
     const userMsg = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMsg]);
 
-    const newBotMsg = { sender: "bot", text: "" };
+    const newBotMsg = { sender: "bot", text: "..." }; // Loading message
     setMessages((prev) => [...prev, newBotMsg]);
 
-    // Constructing the URL with the user's message as a query parameter
     const eventSource = new EventSourcePolyfill(
-      `https://mcd-locator-4f4a288dfb77.herokuapp.com/chat?message=${encodeURIComponent(
-        input
-      )}`,
+      `https://mcd-locator-4f4a288dfb77.herokuapp.com/chat`,
       {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        method: "POST",
+        body: JSON.stringify({ message: input }),
+        headers: { "Content-Type": "application/json" },
       }
     );
 
-    setInput("");
+    setInput(""); // Clear input after sending message
 
     eventSource.onmessage = (event) => {
       if (event.data === "[DONE]") {
@@ -48,6 +45,7 @@ const ChatWidget = () => {
         return;
       }
 
+      // Update bot message with the response
       setMessages((prev) => {
         const updated = [...prev];
         updated[updated.length - 1].text += event.data;
