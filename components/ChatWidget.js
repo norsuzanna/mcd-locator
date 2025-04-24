@@ -27,14 +27,14 @@ const ChatWidget = () => {
 
     try {
       const response = await axios.post(
-        "https://rqh6lf-8000.csb.app/chat", // 🔁 Replace with your actual backend
+        "https://mcd-locator-4f4a288dfb77.herokuapp.com/chat", // 🔁 Replace with your actual backend
         { message: input },
         { headers: { "Content-Type": "application/json" } }
       );
 
       const botMsg = { sender: "bot", text: response.data };
       setMessages((prev) => [...prev, botMsg]);
-    } catch (error) {
+    } catch () {
       setMessages((prev) => [
         ...prev,
         { sender: "bot", text: "⚠️ Error: Could not connect to chatbot." },

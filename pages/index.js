@@ -14,7 +14,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("https://rqh6lf-8000.csb.app/outlets")
+      .get("https://mcd-locator-4f4a288dfb77.herokuapp.com/outlets")
       .then((res) => setOutlets(res.data))
       .catch((err) => console.error("Failed to fetch data", err));
   }, []);
