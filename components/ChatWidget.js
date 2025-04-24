@@ -1,6 +1,5 @@
-"use client";
 import React, { useState, useRef, useEffect } from "react";
-import { EventSourcePolyfill } from "event-source-polyfill";
+import axios from "axios";
 import styles from "../styles/ChatWidget.module.css";
 
 const ChatWidget = () => {
@@ -24,43 +23,23 @@ const ChatWidget = () => {
 
     const userMsg = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMsg]);
+    setInput("");
 
-    const newBotMsg = { sender: "bot", text: "..." }; // Loading message
-    setMessages((prev) => [...prev, newBotMsg]);
+    try {
+      const response = await axios.post(
+        "https://rqh6lf-8000.csb.app/chat", // 🔁 Replace with your actual backend
+        { message: input },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-    const eventSource = new EventSourcePolyfill(
-      `https://mcd-locator-4f4a288dfb77.herokuapp.com/chat`,
-      {
-        method: "POST",
-        body: JSON.stringify({ message: input }),
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-
-    setInput(""); // Clear input after sending message
-
-    eventSource.onmessage = (event) => {
-      if (event.data === "[DONE]") {
-        eventSource.close();
-        return;
-      }
-
-      // Update bot message with the response
-      setMessages((prev) => {
-        const updated = [...prev];
-        updated[updated.length - 1].text += event.data;
-        console.log(updated);
-        return updated;
-      });
-    };
-
-    eventSource.onerror = () => {
-      eventSource.close();
+      const botMsg = { sender: "bot", text: response.data };
+      setMessages((prev) => [...prev, botMsg]);
+    } catch (error) {
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "⚠️ Error connecting to chatbot." },
+        { sender: "bot", text: "⚠️ Error: Could not connect to chatbot." },
       ]);
-    };
+    }
   };
 
   return (
