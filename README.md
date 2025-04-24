@@ -1,30 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍟 McD Locator – FastAPI + Next.js + Supabase
 
-## Getting Started
+**McD Locator** is a full-stack web application that visualizes McDonald’s outlets in Malaysia on a map and provides a smart chatbot interface to help users search for outlet features.
 
-First, run the development server:
+## 🌍 Live Demo
+
+> 🔗 [https://mcd-locator.vercel.app](https://mcd-locator.vercel.app)
+
+---
+
+## ✨ Features
+
+- 🗺️ View all McDonald’s Malaysia outlets on an interactive map
+- 📍 Show 5km radius around each outlet
+- 🔄 Highlight overlapping outlets within catchment areas
+- 💬 Chatbot to answer natural language queries like:
+  - "Which stores open 24 hours?"
+  - "Which outlet has Wi-Fi or EV charging?"
+- 📊 Search by proximity (1KM, 3KM, 5km, 10km, 15km)
+- 📦 API-based backend using FastAPI + Supabase
+---
+
+## 🧱 Tech Stack
+
+| Frontend         | Backend         | Database     | Deployment       |
+|------------------|------------------|--------------|------------------|
+| Next.js (React)  | FastAPI          | Supabase     | Vercel / Heroku  |
+| Axios            | Uvicorn          | PostgreSQL   | Codesandbox Dev  |
+| Leaflet (Map)    | OpenAI API (Chat)|              |                  |
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone Repository
 
 ```bash
-pnpm dev
+git clone https://github.com/norsuzanna/mcd-locator.git
+cd mcd-locator
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install Dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+pnpm run dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+## 📂 Project Structure
 
-## Learn More
+```bash
+/frontend
+    components/ChatWidget.js
+    styles/ChatWidget.module.css
+    pages/index.js      # Main map + chat interface
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 💡 Chat Query Examples
+* "Which outlets open 24 hours?"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* "Show me outlets with EV charging"
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* "Do any outlets offer birthday party?"
 
-## Deploy on Vercel
+## 🧑‍💻 Author
+Built with ❤️ by [@norsuzanna](https://github.com/norsuzanna)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📄 License
+This project is licensed under the MIT License.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
